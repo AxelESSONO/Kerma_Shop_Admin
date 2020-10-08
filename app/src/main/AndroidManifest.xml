@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.obiangetfils.kermashopadmin">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".controller.AdminAccountingActivity"></activity>
+        <activity android:name=".controller.AdminHandleSlideActivity" />
+        <activity android:name=".controller.AdminHandleUsersActivity" />
+        <activity android:name=".controller.AdminHandleNewProductsActivity" />
+        <activity android:name=".controller.AdminHandleNewProductActivity" />
+        <activity android:name=".controller.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".controller.LoginActivity" />
+        <activity android:name=".controller.AddStoryActivity" />
+        <activity android:name=".controller.AddCategoryActivity" />
+        <activity android:name=".controller.AddNewProductActivity" />
+        <activity android:name=".controller.AdminMaintainProductsActivity" />
+        <activity android:name=".controller.CheckNewOrderActivity" />
+        <activity android:name=".controller.AdminHomeActivity" />
+    </application>
+
+</manifest>

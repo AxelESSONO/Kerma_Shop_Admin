@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.obiangetfils.kermashopadmin.controller.AddStoryActivity">
+
+    <include
+        android:id="@+id/include_1"
+        layout="@layout/toolbar_layout" />
+
+    <GridView
+        android:id="@+id/gv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/linear_layout_add"
+        android:layout_below="@id/include_1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:horizontalSpacing="1dp"
+        android:numColumns="3"
+        android:verticalSpacing="1dp"/>
+
+    <ImageView
+        android:id="@+id/no_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linear_layout_add"
+        android:layout_below="@id/include_1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_no_image_yet"
+        android:visibility="visible" />
+
+    <L
+        android:id="@+id/linear_layout_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/images_choice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rounded_corners_bouton"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Choisir les images"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/add_new_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_corners_bouton"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Enregistrer la publicité"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+
+    </L>
+
+</RelativeLayout>

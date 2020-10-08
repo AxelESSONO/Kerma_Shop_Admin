@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".controller.AdminHomeActivity">
+
+    <include
+        android:id="@+id/include_1"
+        layout="@layout/toolbar_layout" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/include_1"
+            android:layout_above="@+id/logout"
+            tools:listitem="@layout/home_action"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"/>
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark"
+        android:fontFamily="@font/maven_pro_bold"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="se déconnecter"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

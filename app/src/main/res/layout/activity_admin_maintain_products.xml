@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.obiangetfils.kermashopadmin.controller.AdminMaintainProductsActivity">
+
+
+    <include
+        android:id="@+id/include_1"
+        layout="@layout/toolbar_layout" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/product_image_maintain"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/product_2"/>
+
+        <EditText
+            android:id="@+id/product_name_maintain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_image_maintain"
+            android:layout_marginTop="5dp"
+            android:hint="Le nom du produit"
+            android:padding="12dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_corners_edittext_dark"
+            android:inputType="text"/>
+
+
+        <EditText
+            android:id="@+id/product_price_maintain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_name_maintain"
+            android:layout_marginTop="5dp"
+            android:hint="Le prix du produit"
+            android:background="@drawable/rounded_corners_edittext_dark"
+            android:padding="12dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/product_description_maintain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_price_maintain"
+            android:layout_marginTop="5dp"
+            android:hint="Description du produit"
+            android:background="@drawable/rounded_corners_edittext_dark"
+            android:padding="12dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:inputType="textMultiLine"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/apply_changes_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="Enregistrer les modifications"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="11sp" />
+
+        <Button
+            android:id="@+id/delete_product_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="Supprimer ce produit"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

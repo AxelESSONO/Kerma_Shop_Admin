@@ -1,0 +1,175 @@
+<resources>
+    <string name="app_name">Kerma Shop Admin</string>
+    <string name="categories_name">Nom de la catégorie</string>
+
+
+    <string name="products"> Produits </string>
+
+
+    <!--  Form Strings -->
+    <string name="full_name"> NOM </string>
+    <string name="first_name"> Prénom(s) </string>
+    <string name="last_name"> NOM </string>
+    <string name="username"> Nom utilisateur </string>
+    <string name="email_address"> Adresse Email</string>
+    <string name="contact_no"> Contact No </string>
+    <string name="address"> Adresse </string>
+    <string name="address_1"> Address 1 </string>
+    <string name="address_2"> Address 2 </string>
+    <string name="company"> Company </string>
+    <string name="country"> Country </string>
+    <string name="zone"> Zone </string>
+    <string name="city"> City </string>
+    <string name="post_code"> Post Code </string>
+    <string name="password"> Mot de passe </string>
+    <string name="new_password"> Nouveau mot de passe </string>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <!--  Messages Strings -->
+    <string name="thank_you"> Merci </string>
+    <string name="empty_cart"> Your Cart is Empty </string>
+    <string name="record_not_found"> Aucun Enregistrement Trouvé </string>
+    <string name="thank_you_for_shopping"> Merci de votre confiance! </string>
+
+    <string name="already_have_account"> Vous avez déjà un compte? </string>
+
+
+    <!--  Errors Message Strings -->
+
+
+    <!-- test -->
+
+
+    <!--  Coupon Error Strings -->
+
+
+    <!--  App Intro Slides Strings -->
+    <string name="slide_1_desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </string>
+    <string name="slide_2_desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </string>
+    <string name="slide_3_desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </string>
+    <string name="slide_4_desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </string>
+    <string name="slide_5_desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </string>
+
+
+    <!--  App Settings Strings -->
+    <string name="privacy_policy"> Politique de confidentialité </string>
+    <string name="refund_policy"> Politique de remboursement </string>
+    <string name="service_terms"> Conditions d\'utilisation </string>
+
+
+    <string name="app_terms_services">
+        En créant un compte vous acceptez nos
+    </string>
+
+
+    <string-array name="sortBy_array">
+        <item> A - Z </item>
+        <item> Z - A </item>
+        <item> Newest </item>
+    </string-array>
+
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </string>
+    <string name="messenger_send_button_text">ENVOYER LE MESSAGE</string>
+    <string name="seller_info"> Seller Information </string>
+    <string name="view_store">View store</string>
+    <string name="save_changes">Enregistrer les informations</string>
+    <string name="phone_number">Votre numero de téléphone</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
+    <string name="and"> et </string>
+    <string name="register">S\'inscrire</string>
+    <string name="login">se connecter</string>
+    <string name="userphone">Numéro de téléphone</string>
+    <string name="categories">Catégories</string>
+    <string name="reset_filters">Réinitialiser les filtres</string>
+    <string name="sample_coupons">Exemples de coupons</string>
+    <string name="subtotal">Total</string>
+    <string name="discount">Remise</string>
+    <string name="total_price">Prix ​​total: </string>
+    <string name="checkout">Valider</string>
+    <string name="NEW">Nouveau</string>
+    <string name="featured">En vedette</string>
+    <string name="Sale">En Vente</string>
+    <string name="in_stock">En stock</string>
+    <string name="product_title">Nom du produit</string>
+    <string name="category">Catégorie du produit</string>
+    <string name="reviews_ratings">Notes et avis</string>
+    <string name="quantity">Quantité</string>
+    <string name="description">Description du produit</string>
+    <string name="related_products">Vous aimeriez aussi les produits suivants...</string>
+    <string name="addToCart">Ajouter au panier</string>
+    <string name="Featured">Featured</string>
+    <string name="all">Tout</string>
+    <string name="shipping_address">Adresse de livraison</string>
+    <string name="cancel">Annuler</string>
+    <string name="billing_address">Adresse de facturation</string>
+    <string name="shipping_method">Mode de livraison</string>
+    <string name="tax">Taxe</string>
+    <string name="shipping">Livraison</string>
+    <string name="total">Total</string>
+    <string name="order_notes">Note de commande</string>
+    <string name="payment_method">Moyens de paiement</string>
+    <string name="payment_details">Détails de paiement</string>
+    <string name="card_number">Numéra de la carte</string>
+    <string name="card_cvv">CVV</string>
+    <string name="card_expiry">Date d\'expiration</string>
+    <string name="order_now">Payer maintenant</string>
+    <string name="product_price">Prix unitaire</string>
+    <string name="order_status">Statut de la commande</string>
+    <string name="continue_shopping">Continuer vos achats</string>
+    <string name="order_id">Numéro de la commande</string>
+    <string name="no_of_products">N° du produit</string>
+    <string name="checkout_price">Prix de caisse</string>
+    <string name="order_date">Date de la commande</string>
+    <string name="processing">Traitement</string>
+    <string name="cancel_order">Annuler la commande</string>
+    <string name="order_details">Détails de la commande</string>
+    <string name="track_order">Suivre ma commande</string>
+    <string name="tracking_string">Suivi du statut</string>
+    <string name="view">Vue</string>
+    <string name="remove">Supprimer</string>
+    <string name="newest">Newest</string>
+    <string name="super_deals">Deals</string>
+    <string name="profile_username">Nom utilisateur</string>
+    <string name="phone_number_drawer">Numero de téléphone</string>
+    <string name="newest_product">Nouveau</string>
+    <string name="super_deals_product">Promo</string>
+    <string name="trend">Tendance</string>
+    <string name="label_buy_now">Payer maintenant</string>
+    <string name="title_activity_home_simple">HomeSimple</string>
+    <string name="title_activity_seller_home">SellerHomeActivity</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="home_seller">Accueil</string>
+    <string name="home_deliver">Mes gains</string>
+    <string name="user_delivery">Compte livreur</string>
+    <string name="menu_home_delivery">Accueil</string>
+    <string name="user_pickupPoint">Point retrait</string>
+    <string name="sample_image_name">image name</string>
+    <string name="facebook_login">Se connecter avec Facebook</string>
+    <string name="addToBdd">Enregistrer les images</string>
+    <string name="selectImage">Choisir les images</string>
+    <string name="new_price">nouveau prix</string>
+    <string name="old_price">ancien prix</string>
+    <string name="cgu">En cochant ce bouton, vous acceptez notre politique générale de vente, confitialité et d\'utilisation.</string>
+    <string name="kerma_shop_admin">KERMA SHOP ADMIN</string>
+    <string name="password_hint">• • • • • • • • • • •</string>
+    <string name="user_email">Mon Email</string>
+    <string name="add_new_product">AJOUTER UN NOUVEAU PRODUIT</string>
+
+
+</resources>

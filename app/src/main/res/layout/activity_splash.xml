@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@color/white"
+    tools:context=".controller.SplashActivity">
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KERMA SHOP ADMIN"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:fontFamily="@font/maven_pro_regular"
+        android:layout_centerInParent="true"/>
+
+    <ProgressBar
+        android:id="@+id/splash_loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:indeterminateTint="@android:color/holo_red_light"
+        android:indeterminateTintMode="src_in"/>
+
+</RelativeLayout>
