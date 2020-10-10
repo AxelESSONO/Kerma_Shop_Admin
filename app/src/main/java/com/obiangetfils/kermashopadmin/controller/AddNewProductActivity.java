@@ -8,7 +8,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -70,6 +70,7 @@ public class AddNewProductActivity extends AppCompatActivity {
     private Button selectButton, saveImage;
 
     int PICK_IMAGE_MULTIPLE = 1;
+    private static final int IMAGE_CODE = 1;
     private AddProductAdapter galleryAdapter;
     private ClipData mClipData;
     private Toolbar toolbar;
@@ -81,16 +82,19 @@ public class AddNewProductActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private StorageReference mStorageRef;
 
 
     // get the Firebase  storage reference
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
     DatabaseReference productsRef;
 
     private SearchableSpinner categorySearchSpinner;
 
     private Uri mImageUri;
+
+
+    private List<Uri> imageUri = new ArrayList<>();
+    private List<String> imageName = new ArrayList<>();
 
     private List<Uri> mUri = new ArrayList<>();
 
@@ -117,55 +121,16 @@ public class AddNewProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_product);
 
-        /** bind View **/
-        productNameEdt = (EditText) findViewById(R.id.productName);
-        productNewPriceEdt = (EditText) findViewById(R.id.productNewPrice);
-        productOldPriceEdt = (EditText) findViewById(R.id.productOldPrice);
-        productQuantityEdt = (EditText) findViewById(R.id.productQuantity);
-        productDescriptionEdt = (EditText) findViewById(R.id.productDescriptionEdt);
-
-        // Button
-        selectButton = (Button) findViewById(R.id.select_image);
-        saveImage = (Button) findViewById(R.id.save_image);
-
-        // Recyclerview
-        recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewAddNewProduct);
-
-        //Toolbar
-        toolbar = (Toolbar) findViewById(R.id.include_1);
-
-        //ImageView
-        ret = (ImageView) toolbar.findViewById(R.id.ret);
-        noImageLoaded = (ImageView) findViewById(R.id.noImageLoaded);
-        whatsappId = (ImageView) findViewById(R.id.whatsappId);
-        icFacebook = (ImageView) findViewById(R.id.icFacebook);
-        icGmail = (ImageView) findViewById(R.id.icGmail);
-        icPhone = (ImageView) findViewById(R.id.icPhone);
-
-        //TextView
-        titleTxt = (TextView) toolbar.findViewById(R.id.toolbar_title);
-
-        //Spinners
-        //productTypeSpinner = findViewById(R.id.SearchableProductType);
-        categorySearchSpinner = findViewById(R.id.SearchableSpinnerCategory);
-
-        // Checkbox
-        newness = (CheckBox) findViewById(R.id.newness);
-        sale = (CheckBox) findViewById(R.id.sale);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        /** bind View End **/
+        bindView();
 
         /** Firebase Storage **/
 
         // get the Firebase  storage reference
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        productsRef = FirebaseDatabase.getInstance().getReference();
 
         titleTxt.setText(R.string.add_new_product);
         initSpinnerCategory();
-        //initSpinnerProductType();
 
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +183,6 @@ public class AddNewProductActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Veuillez remplir tous les champs!", Toast.LENGTH_SHORT).show();
         } else {
-
             upLoadIntoDataBase(category, productName, currentPrice, oldPrice, quantity, productDescription, tagNew, tagOnSale, mArrayUri);
         }
 
@@ -229,18 +193,36 @@ public class AddNewProductActivity extends AppCompatActivity {
             final String productDescription, final Boolean tagNew, final Boolean tagOnSale, final ArrayList<Uri> pArrayUri) {
 
         ProductRandomKey = UUID.randomUUID().toString();
-        final StorageReference reference = storageReference.child("Product images" + "/" + category + "/" + ProductRandomKey);
 
         if (mArrayUri.size() > 0) {
-            for (int i = 0; i < mArrayUri.size(); i++) {
-                reference.putFile(mArrayUri.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+            final HashMap<String, Object> productImage = new HashMap<>();
+
+            for (int i = 0; i < imageName.size(); i++) {
+
+                final StorageReference mRef = mStorageRef.child("Product Images")
+                        .child(categorySearchSpinner.getSelectedItem().toString())
+                        .child(imageName.get(i));
+
+                final int finalI = i;
+                mRef.putFile(imageUri.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 mUri.add(uri);
+
+                                productImage.put("product_" + finalI, uri.toString());
+                                productsRef.child("Products")
+                                        .child(category)
+                                        .child(ProductRandomKey)
+                                        .child("ImagesProducts").updateChildren(productImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(AddNewProductActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -248,21 +230,20 @@ public class AddNewProductActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddNewProductActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNewProductActivity.this, "Fail" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
 
-            SaveProductInfoToDatabase(category, productName, currentPrice,
-                    oldPrice, quantity, productDescription, tagNew, tagOnSale);
+            SaveProductInfoToDatabase(category, productName, currentPrice, oldPrice, quantity, productDescription, tagNew, tagOnSale);
         }
     }
 
     private void SaveProductInfoToDatabase(
-            String category, String productName, String currentPrice, String oldPrice,
+            final String category, String productName, String currentPrice, String oldPrice,
             String quantity, String productDescription, Boolean tagNew, Boolean tagOnSale) {
 
-        productsRef = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> productMap = new HashMap<>();
         productMap.put("pid", ProductRandomKey);
         productMap.put("date", saveCurrentDate);
@@ -277,7 +258,7 @@ public class AddNewProductActivity extends AppCompatActivity {
         productMap.put("tagNew", tagNew);
         productMap.put("tagOnSale", tagOnSale);
 
-        productsRef.child("Products").child(ProductRandomKey).updateChildren(productMap)
+        productsRef.child("Products").child(category).child(ProductRandomKey).updateChildren(productMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -285,8 +266,6 @@ public class AddNewProductActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(AddNewProductActivity.this, AdminHomeActivity.class);
                             startActivity(intent);
-
-                            Toast.makeText(AddNewProductActivity.this, "Produit(s) ajouté(s) avec succès.", Toast.LENGTH_SHORT).show();
 
                         } else {
                             String message = task.getException().toString();
@@ -307,12 +286,12 @@ public class AddNewProductActivity extends AppCompatActivity {
 
                 // List to store admin Key
                 List<String> keyCategories = new ArrayList<>();
-                keyCategories.add("Sélectionner la catégory");
+                keyCategories.add("Sélectionner une catégorie");
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     keyCategories.add(dataSnapshot.getKey());
                 }
 
-                categorySearchSpinner.setTitle("Sélectionner la catégory");
+                categorySearchSpinner.setTitle("Sélectionner une catégorie");
                 categorySearchSpinner.setPositiveButton("OK");
 
                 categorySearchSpinner.setAdapter(new ArrayAdapter<>(AddNewProductActivity.this,
@@ -323,10 +302,9 @@ public class AddNewProductActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                         if (position == 0) {
-                            Toast.makeText(AddNewProductActivity.this, "Veuillez sélectionner une Catégorie", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddNewProductActivity.this, "Veuillez sélectionner une catégorie", Toast.LENGTH_SHORT).show();
                         } else {
                             String categoryName = parent.getItemAtPosition(position).toString();
-                            Toast.makeText(AddNewProductActivity.this, categoryName, Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -348,88 +326,143 @@ public class AddNewProductActivity extends AppCompatActivity {
     private void pickImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Sélection"), PICK_IMAGE_MULTIPLE);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, IMAGE_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        try {
-            // When an Image is picked
-            if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK && data != null) {
-                // Get the Image from data
+        if (requestCode == IMAGE_CODE && resultCode == RESULT_OK) {
 
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                imagesEncodedList = new ArrayList<String>();
-                if (data.getData() != null) {
-                    mImageUri = data.getData();
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(mImageUri, filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
+            if (data.getClipData() != null) {
 
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imageEncoded = cursor.getString(columnIndex);
-                    cursor.close();
-                    mArrayUri.add(mImageUri);
-                    galleryAdapter = new AddProductAdapter(AddNewProductActivity.this, mArrayUri);
+                int totalitem = data.getClipData().getItemCount();
+
+                for (int i = 0; i < totalitem; i++) {
+
+                    imageUri.add(data.getClipData().getItemAt(i).getUri());
+                    imageName.add(getFileName(imageUri.get(i)));
+                    mArrayUri.add(data.getClipData().getItemAt(i).getUri());
+/*
+                    final StorageReference mRef = mStorageRef.child("Product Images")
+                            .child(categorySearchSpinner.getSelectedItem().toString())
+                            .child(imagename);
+
+                    mRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(AddNewProductActivity.this, "Image(s) sauvegardée(s) dans la base de données",
+                                    Toast.LENGTH_SHORT).show();
+
+                            mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    mUri.add(uri);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AddNewProductActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(AddNewProductActivity.this, "Fail" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });*/
+                }
+
+                galleryAdapter = new AddProductAdapter(AddNewProductActivity.this, mArrayUri);
+                if (mArrayUri.size() > 0) {
+                    recyclerViewImage.setVisibility(View.VISIBLE);
+                    noImageLoaded.setVisibility(View.GONE);
+                    selectButton.setVisibility(View.GONE);
+                    saveImage.setVisibility(View.VISIBLE);
                     recyclerViewImage.setLayoutManager(new GridLayoutManager(this, 2));
                     recyclerViewImage.setAdapter(galleryAdapter);
 
+                    Toast.makeText(this, "" + mArrayUri.size() + " image(s) sélectionnée(s) ", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    if (data.getClipData() != null) {
-                        //ClipData
-                        mClipData = data.getClipData();
-                        Uri uri;
-                        for (int i = 0; i < mClipData.getItemCount(); i++) {
-                            ClipData.Item item = mClipData.getItemAt(i);
-                            uri = item.getUri();
-                            mArrayUri.add(uri);
-                            /** Load tmpProductImage **/
-                            tmpProductImage.put("image " + i, uri);
-                            /** Load ends **/
-                            // Get the cursor
-                            Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
-                            // Move to first row
-                            cursor.moveToFirst();
-                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                            imageEncoded = cursor.getString(columnIndex);
-                            imagesEncodedList.add(imageEncoded);
-                            cursor.close();
-                        }
-
-                        galleryAdapter = new AddProductAdapter(getApplicationContext(), mArrayUri);
-
-                        if (mArrayUri.size() > 0) {
-                            recyclerViewImage.setVisibility(View.VISIBLE);
-                            noImageLoaded.setVisibility(View.GONE);
-                            selectButton.setVisibility(View.GONE);
-                            saveImage.setVisibility(View.VISIBLE);
-                            recyclerViewImage.setLayoutManager(new GridLayoutManager(this, 2));
-                            recyclerViewImage.setAdapter(galleryAdapter);
-                            Toast.makeText(this, "" + mArrayUri.size() + "Images sélectionnée(s) ", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            recyclerViewImage.setVisibility(View.GONE);
-                            noImageLoaded.setVisibility(View.VISIBLE);
-                            selectButton.setVisibility(View.VISIBLE);
-                            saveImage.setVisibility(View.GONE);
-                        }
-                    }
+                    recyclerViewImage.setVisibility(View.GONE);
+                    noImageLoaded.setVisibility(View.VISIBLE);
+                    selectButton.setVisibility(View.VISIBLE);
+                    saveImage.setVisibility(View.GONE);
                 }
-            } else {
-                Toast.makeText(this, "Vous avez choisi aucune image", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        } finally {
-            if (mArrayUri.size() >= 1) {
-                Toast.makeText(this, "Images sélectionnée(s) " + mArrayUri.size(), Toast.LENGTH_SHORT).show();
+
+            } else if (data.getData() != null) {
+                Toast.makeText(this, "single", Toast.LENGTH_SHORT).show();
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * bind View
+     **/
+    private void bindView() {
+
+        productNameEdt = (EditText) findViewById(R.id.productName);
+        productNewPriceEdt = (EditText) findViewById(R.id.productNewPrice);
+        productOldPriceEdt = (EditText) findViewById(R.id.productOldPrice);
+        productQuantityEdt = (EditText) findViewById(R.id.productQuantity);
+        productDescriptionEdt = (EditText) findViewById(R.id.productDescriptionEdt);
+
+        // Button
+        selectButton = (Button) findViewById(R.id.select_image);
+        saveImage = (Button) findViewById(R.id.save_image);
+
+        // Recyclerview
+        recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewAddNewProduct);
+
+        //Toolbar
+        toolbar = (Toolbar) findViewById(R.id.include_1);
+
+        //ImageView
+        ret = (ImageView) toolbar.findViewById(R.id.ret);
+        noImageLoaded = (ImageView) findViewById(R.id.noImageLoaded);
+        whatsappId = (ImageView) findViewById(R.id.whatsappId);
+        icFacebook = (ImageView) findViewById(R.id.icFacebook);
+        icGmail = (ImageView) findViewById(R.id.icGmail);
+        icPhone = (ImageView) findViewById(R.id.icPhone);
+
+        //TextView
+        titleTxt = (TextView) toolbar.findViewById(R.id.toolbar_title);
+
+        //Spinners
+        //productTypeSpinner = findViewById(R.id.SearchableProductType);
+        categorySearchSpinner = findViewById(R.id.SearchableSpinnerCategory);
+
+        // Checkbox
+        newness = (CheckBox) findViewById(R.id.newness);
+        sale = (CheckBox) findViewById(R.id.sale);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 }
